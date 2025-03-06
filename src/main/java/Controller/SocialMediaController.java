@@ -27,44 +27,10 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
-    /**
-     * User Registration endpoint
-     */
-    app.post("/register", ctx -> {
-        Account account = ctx.bodyAsClass(Account.class);
-        Account registeredAccount = accountService.registerUser(account);
-        if(registeredAccount != null){
-            ctx.status(200).json(registeredAccount);
-        } else {
-            ctx.status(400).result("");
-        }
-    });
-
-    /**
-     * User Login endpoint
-     */
-    app.post("/login", ctx -> {
-        Account account = ctx.bodyAsClass(Account.class);
-        Account registeredAccount = accountService.userLogin(account);
-        if(registeredAccount != null){
-            ctx.status(200).json(registeredAccount);
-        } else {
-            ctx.status(401).result("");
-        }
-    });
-
-    /**
-     * Create post
-     */
-    app.post("/messages", ctx -> {
-        Message message = ctx.bodyAsClass(Message.class);
-        Message createdMessage = messageService.createMessage(message);
-        if(createdMessage != null){
-            ctx.status(200).json(createdMessage);
-        } else {
-            ctx.status(400).result("");
-        }
-    });
+        app.post("register", this::registerAccountHandler);
+        app.post("login", this::loginHandler);
+        app.post("messages", this::createMessageHandler);
+    
         return app;
     }
 
@@ -76,5 +42,46 @@ public class SocialMediaController {
         context.json("sample text");
     }
 
+    /**
+     * Handler for registering account
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void registerAccountHandler(Context ctx){
+        Account account = ctx.bodyAsClass(Account.class);
+        Account registeredAccount = accountService.registerAccount(account);
+        if(registeredAccount != null){
+            ctx.status(200).json(registeredAccount);
+        } else {
+            ctx.status(400).result("");
+        }
+    }
+
+    /**
+     * Handler for user account login
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void loginHandler(Context ctx) {
+        Account account = ctx.bodyAsClass(Account.class);
+        Account registeredAccount = accountService.userLogin(account);
+        if(registeredAccount != null){
+            ctx.status(200).json(registeredAccount);
+        } else {
+            ctx.status(401).result("");
+        }
+    }
+
+    /**
+     * Handler for creating message
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void createMessageHandler(Context ctx) {
+        Message message = ctx.bodyAsClass(Message.class);
+        Message createdMessage = messageService.createMessage(message);
+        if(createdMessage != null){
+            ctx.status(200).json(createdMessage);
+        } else {
+            ctx.status(400).result("");
+        }
+    }
 
 }

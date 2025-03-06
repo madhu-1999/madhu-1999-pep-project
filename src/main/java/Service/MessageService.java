@@ -12,6 +12,12 @@ public class MessageService {
         messageDAO = new MessageDAO();
         accountDAO = new AccountDAO();
     }
+
+    /**
+     * Creates a new blog post entry.
+     * @param message
+     * @return created Message object if successfully created, else null
+     */
     public Message createMessage(Message message) {
         Message createdMessage = null;
         boolean existsUser = accountDAO.isAccountExists(message.getPosted_by());

@@ -18,9 +18,9 @@ public class AccountService {
      * <li> Password is atleast 4 characters long
      * </ul>
      * @param account
-     * @return
+     * @return created object account if insertion successful, else null
      */
-    public Account registerUser(Account account){
+    public Account registerAccount(Account account){
         String username = account.getUsername();
         String password = account.getPassword();
         Account registeredAccount = null;
@@ -32,6 +32,11 @@ public class AccountService {
         return registeredAccount;
     }
 
+    /**
+     * Handles user login
+     * @param account
+     * @return Account object for user who has logined.
+     */
     public Account userLogin(Account account) {
         String username = account.getUsername();
         String password = account.getPassword();

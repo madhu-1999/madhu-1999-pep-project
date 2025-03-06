@@ -16,6 +16,11 @@ public class MessageDAO {
         this.connection = ConnectionUtil.getConnection();
     }
 
+    /**
+     * Inserts a blog post record
+     * @param message
+     * @return blog post id if insert successful, else return -1;
+     */
     public int createMessage(Message message) {
         String sql = "INSERT INTO Message(posted_by, message_text, time_posted_epoch) VALUES(?, ?, ?)";
         int message_id = -1;
@@ -40,6 +45,11 @@ public class MessageDAO {
         return message_id;
     }
 
+    /**
+     * Fetches a blog post by its id
+     * @param message_id
+     * @return Message object of blog post with given message_id, else null
+     */
     public Message getMessage(int message_id) {
         String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM Message WHERE message_id = ?";
         Message message = null;
