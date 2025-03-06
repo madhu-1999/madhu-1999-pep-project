@@ -107,4 +107,25 @@ public class MessageDAO {
         }
         return allMessages;
     }
+
+    /**
+     * Fetch a message with given message_id
+     * @param message_id
+     * @return Message object if message exists, else null
+     */
+    public Message getMessageById(int message_id) {
+        String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM Message WHERE message_id = ?";
+        Message message = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, message_id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                message = new Message(rs.getInt(1), rs.getInt(2),rs.getString(3), rs.getLong(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
 }

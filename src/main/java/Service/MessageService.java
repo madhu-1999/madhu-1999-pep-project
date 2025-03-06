@@ -48,5 +48,18 @@ public class MessageService {
             return new ArrayList<>();
        return messageDAO.getAllMessagesByAccountId(account_id);
     }
+
+    /**
+     * Fetches a message with given message_id
+     * @param message_id
+     * @return Message object if message with given message_id exists, else null
+     */
+    public Message getMessageById(int message_id) {
+        Message message = null;
+        if(message_id == -1)
+            return message;
+        message = messageDAO.getMessageById(message_id);
+        return message;
+    }
     
 }
