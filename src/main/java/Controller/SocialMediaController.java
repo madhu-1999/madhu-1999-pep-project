@@ -1,5 +1,7 @@
 package Controller;
 
+import Model.Account;
+import Service.AccountService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -9,6 +11,11 @@ import io.javalin.http.Context;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+    private AccountService accountService;
+
+    public SocialMediaController() {
+        accountService = new AccountService();
+    }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -17,6 +24,18 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
+    /**
+     * User Registration endpoint
+     */
+    app.post("/register", ctx -> {
+        Account account = ctx.bodyAsClass(Account.class);
+        Account registeredAccount = accountService.registerUser(account);
+        if(registeredAccount != null){
+            ctx.status(200).json(registeredAccount);
+        } else {
+            ctx.status(400).result("");
+        }
+    });
 
         return app;
     }
