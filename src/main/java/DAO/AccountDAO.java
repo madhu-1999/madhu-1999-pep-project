@@ -21,16 +21,16 @@ public class AccountDAO {
      */
     public boolean registerUser(Account account){
         String sql = "INSERT INTO Account(username, password) VALUES(?, ?)";
+        int rowsAffected = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return rowsAffected > 0;
     }
 
     /**
@@ -54,7 +54,7 @@ public class AccountDAO {
     /**
      * Fetches account details for given username
      * @param username
-     * @return Account of user with given username
+     * @return Account of user with given username, if exists else null
      */
     public Account getAccount(String username) {
         String sql = "SELECT account_id, username, password FROM Account WHERE username = ?";
@@ -70,5 +70,23 @@ public class AccountDAO {
             e.printStackTrace();
         }
         return account;
+    }
+
+     /**
+     * Checks if account exists for given account id
+     * @param username
+     * @return true if account exists, else false
+     */
+    public boolean isAccountExists(int account_id) {
+        String sql = "SELECT account_id, username, password FROM Account WHERE account_id = ?";
+        boolean exists = false;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, account_id);
+            exists = ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return exists;
     }
  }

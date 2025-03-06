@@ -1,7 +1,9 @@
 package Controller;
 
 import Model.Account;
+import Model.Message;
 import Service.AccountService;
+import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -12,9 +14,10 @@ import io.javalin.http.Context;
  */
 public class SocialMediaController {
     private AccountService accountService;
-
+    private MessageService messageService;
     public SocialMediaController() {
         accountService = new AccountService();
+        messageService = new MessageService();
     }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -47,6 +50,19 @@ public class SocialMediaController {
             ctx.status(200).json(registeredAccount);
         } else {
             ctx.status(401).result("");
+        }
+    });
+
+    /**
+     * Create post
+     */
+    app.post("/messages", ctx -> {
+        Message message = ctx.bodyAsClass(Message.class);
+        Message createdMessage = messageService.createMessage(message);
+        if(createdMessage != null){
+            ctx.status(200).json(createdMessage);
+        } else {
+            ctx.status(400).result("");
         }
     });
         return app;
