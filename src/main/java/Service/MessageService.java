@@ -76,5 +76,22 @@ public class MessageService {
         if(!success) return null;
         return message;
     }
+
+    /**
+     * Updates message text for given message_id
+     * @param message_id
+     * @param message 
+     * @return Message object of successfully updated message, else null
+     */
+    public Message updateMessageById(int message_id, Message message) {
+        Message updatedMessage = null;
+        boolean existsMessage = messageDAO.isMessageExists(message_id);
+        if(message != null && !message.getMessage_text().isBlank() && message.getMessage_text().length() <=255 && existsMessage) {
+            boolean success = messageDAO.updateMessageById(message_id, message);
+            if(success)
+                updatedMessage = messageDAO.getMessageById(message_id);
+        }
+        return updatedMessage;
+    }
     
 }

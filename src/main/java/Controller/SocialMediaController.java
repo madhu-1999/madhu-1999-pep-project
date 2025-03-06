@@ -33,8 +33,9 @@ public class SocialMediaController {
         app.post("messages", this::createMessageHandler);
         app.get("messages", this::getAllMessagesHandler);
         app.get("accounts/{id}/messages", this::getAllMessagesByAccountIdHandler);
-        app.get("messages/{message_id}", this::getMessageById);
-        app.delete("messages/{message_id}", this::deleteMessageById);
+        app.get("messages/{message_id}", this::getMessageByIdHandler);
+        app.delete("messages/{message_id}", this::deleteMessageByIdHandler);
+        app.patch("messages/{message_id}", this::updateMessageByIdHandler);
         return app;
     }
 
@@ -116,7 +117,7 @@ public class SocialMediaController {
      * Fetches a message given its message_id
      * @param ctx
      */
-    private void getMessageById(Context ctx) {
+    private void getMessageByIdHandler(Context ctx) {
         int message_id = -1;
         try {
             message_id = Integer.parseInt(ctx.pathParam("message_id"));
@@ -135,7 +136,7 @@ public class SocialMediaController {
      * Deletes message with given message_id
      * @param ctx
      */
-    private void deleteMessageById(Context ctx) {
+    private void deleteMessageByIdHandler(Context ctx) {
         int message_id = -1;
         try {
             message_id = Integer.parseInt(ctx.pathParam("message_id"));
@@ -147,6 +148,27 @@ public class SocialMediaController {
             ctx.status(200).json(message);
         } else {
             ctx.status(200);
+        }
+    }
+
+    /**
+     * Update message of given message_id
+     * @param ctx
+     */
+    private void updateMessageByIdHandler(Context ctx) {
+        int message_id = -1;
+        Message message = null;
+        try {
+            message_id = Integer.parseInt(ctx.pathParam("message_id"));
+            message = ctx.bodyAsClass(Message.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Message updatedMessage = messageService.updateMessageById(message_id, message);
+        if(updatedMessage != null){
+            ctx.status(200).json(updatedMessage);
+        } else {
+            ctx.status(400);
         }
     }
 }

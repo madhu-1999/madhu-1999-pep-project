@@ -129,12 +129,54 @@ public class MessageDAO {
         return message;
     }
 
+    /**
+     * Deletes message for given message_id
+     * @param message_id
+     * @return true if successfully deleted, else false
+     */
     public boolean deleteMessageById(int message_id) {
         String sql = "DELETE FROM Message WHERE message_id = ?";
         int rowsAffected = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, message_id);
+            rowsAffected =  ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rowsAffected > 0;
+    }
+
+    /**
+     * Checks if there exists a message with given message_id
+     * @param message_id
+     * @return true if message exists, else false
+     */
+    public boolean isMessageExists(int message_id) {
+        String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM Message WHERE message_id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, message_id);
+            return ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Updates message text for given message_id
+     * @param message_id
+     * @param message Message object to be updated
+     * @return true if update is successful, else false
+     */
+    public boolean updateMessageById(int message_id, Message message) {
+        String sql = "UPDATE Message SET message_text = ? WHERE message_id = ?";
+        int rowsAffected = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, message.getMessage_text());
+            ps.setInt(2, message_id);
             rowsAffected =  ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
