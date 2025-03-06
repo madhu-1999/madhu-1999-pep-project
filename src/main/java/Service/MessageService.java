@@ -61,5 +61,20 @@ public class MessageService {
         message = messageDAO.getMessageById(message_id);
         return message;
     }
+
+    /**
+     * Deletes message with given message_id
+     * @param message_id
+     * @return Message object of deleted message, else null
+     */
+    public Message deleteMessageById(int message_id) {
+        Message message = null;
+        if(message_id == -1)
+            return message;
+        message = messageDAO.getMessageById(message_id);
+        boolean success = messageDAO.deleteMessageById(message_id);
+        if(!success) return null;
+        return message;
+    }
     
 }

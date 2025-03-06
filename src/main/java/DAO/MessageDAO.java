@@ -128,4 +128,19 @@ public class MessageDAO {
         }
         return message;
     }
+
+    public boolean deleteMessageById(int message_id) {
+        String sql = "DELETE FROM Message WHERE message_id = ?";
+        int rowsAffected = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, message_id);
+            rowsAffected =  ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rowsAffected > 0;
+    }
+
+
 }
