@@ -31,4 +31,15 @@ public class AccountService {
         }
         return registeredAccount;
     }
+
+    public Account userLogin(Account account) {
+        String username = account.getUsername();
+        String password = account.getPassword();
+        Account registeredAccount = null;
+        registeredAccount = accountDAO.getAccount(username);
+        if(registeredAccount != null && !registeredAccount.getPassword().equals(password)) {
+            registeredAccount = null;
+        }
+        return registeredAccount;
+    }
 }

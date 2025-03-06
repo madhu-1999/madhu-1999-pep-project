@@ -37,6 +37,18 @@ public class SocialMediaController {
         }
     });
 
+    /**
+     * User Login endpoint
+     */
+    app.post("/login", ctx -> {
+        Account account = ctx.bodyAsClass(Account.class);
+        Account registeredAccount = accountService.userLogin(account);
+        if(registeredAccount != null){
+            ctx.status(200).json(registeredAccount);
+        } else {
+            ctx.status(401).result("");
+        }
+    });
         return app;
     }
 
