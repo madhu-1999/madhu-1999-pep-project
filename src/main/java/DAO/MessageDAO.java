@@ -5,7 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.List;
+import java.util.ArrayList;
 import Model.Message;
 import Util.ConnectionUtil;
 
@@ -64,5 +65,46 @@ public class MessageDAO {
             e.printStackTrace();
         }
         return message;
+    }
+
+    /**
+     * Fetches all messages created by all accounts
+     * @return List of all messages created by all accounts if any, else empty list
+     */
+    public List<Message> getAllMessages() {
+        String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM Message";
+        List<Message> allMessages = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt(1), rs.getInt(2),rs.getString(3), rs.getLong(4));
+                allMessages.add(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return allMessages;
+    }
+
+    /**
+     * Fetches all messages created by given account_id
+     * @return List of all messages created by account_id if present, else empty list
+     */
+    public List<Message> getAllMessagesByAccountId(int account_id) {
+        String sql = "SELECT message_id, posted_by, message_text, time_posted_epoch FROM Message WHERE posted_by = ?";
+        List<Message> allMessages = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, account_id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt(1), rs.getInt(2),rs.getString(3), rs.getLong(4));
+                allMessages.add(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return allMessages;
     }
 }

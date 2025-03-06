@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.List;
+import java.util.ArrayList;
 import DAO.AccountDAO;
 import DAO.MessageDAO;
 import Model.Message;
@@ -27,6 +29,24 @@ public class MessageService {
             createdMessage = messageDAO.getMessage(message_id);
         }
         return createdMessage;
+    }
+    
+    /**
+     * Fetches all messages created by all users
+     * @return List of all messages created by all users
+     */
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessages();
+    }
+
+    /**
+     * Fetches all messages created by given account id
+     * @return List of all messages created by given account id
+     */
+    public List<Message> getAllMessagesByAccountId(int account_id) {
+        if(account_id == -1)
+            return new ArrayList<>();
+       return messageDAO.getAllMessagesByAccountId(account_id);
     }
     
 }

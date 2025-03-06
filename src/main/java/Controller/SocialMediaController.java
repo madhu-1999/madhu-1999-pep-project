@@ -6,6 +6,7 @@ import Service.AccountService;
 import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import java.util.List;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -30,7 +31,8 @@ public class SocialMediaController {
         app.post("register", this::registerAccountHandler);
         app.post("login", this::loginHandler);
         app.post("messages", this::createMessageHandler);
-    
+        app.get("messages", this::getAllMessagesHandler);
+        app.get("accounts/{id}/messages", this::getAllMessagesByAccountIdHandler);
         return app;
     }
 
@@ -82,6 +84,30 @@ public class SocialMediaController {
         } else {
             ctx.status(400).result("");
         }
+    }
+
+    /**
+     * Handler for fetching all messages created by all accounts
+     * @param ctx
+     */
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> allMessages = messageService.getAllMessages();
+        ctx.status(200).json(allMessages);
+    }
+    
+    /**
+     * Handler for fetching all messages created by given account id.
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void getAllMessagesByAccountIdHandler(Context ctx) {
+        int accountId = -1;
+        try {
+            accountId = Integer.parseInt(ctx.pathParam("id"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<Message> allMessages = messageService.getAllMessagesByAccountId(accountId);
+        ctx.status(200).json(allMessages);
     }
 
 }
